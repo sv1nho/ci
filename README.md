@@ -38,7 +38,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   ci:
-    uses: sv1nho/ci/.github/workflows/pipeline.yml@<commit-sha>
+    uses: sv1nho/ci/.github/workflows/pipeline.yml@v1
     with:
       e2e_base_url: http://127.0.0.1:3100
     secrets: inherit
@@ -57,13 +57,19 @@ permissions:
   pull-requests: write
 jobs:
   maintenance:
-    uses: sv1nho/ci/.github/workflows/maintenance.yml@<commit-sha>
+    uses: sv1nho/ci/.github/workflows/maintenance.yml@v1
     with:
       e2e_base_url: http://127.0.0.1:3100
     secrets: inherit
 ```
 
-Pin `@<commit-sha>` to a commit of this repo, the same way the workflows pin
-their actions. The advisories job needs the repo secrets `AUTOMATION_APP_ID`
-and `AUTOMATION_APP_KEY` (a GitHub App installed on the consumer repo); without
+Consumers pin `@v1`, a moving tag on this repo. A backward-compatible change
+here is released by moving `v1` to the new commit (`git tag -f v1 <sha> && git
+push -f origin v1`); every consumer picks it up on its next run, with no edit
+on their side. A breaking change gets a new tag (`v2`) that consumers adopt
+deliberately. The third-party actions inside these workflows stay pinned by
+commit SHA, so moving `v1` never pulls in unreviewed third-party code.
+
+The advisories job needs the repo secrets `AUTOMATION_APP_ID` and
+`AUTOMATION_APP_KEY` (a GitHub App installed on the consumer repo); without
 them only the nightly maintenance run fails, never the pipeline.
