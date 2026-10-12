@@ -7,6 +7,10 @@ on:
         description: Base URL the browser tests serve on; must match the port in playwright.config.ts.
         type: string
         default: http://127.0.0.1:3100
+      boot_env:
+        description: Extra KEY=VALUE lines (one per line) added to the environment for the production boot smoke test.
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -80,6 +84,11 @@ jobs:
 
       - name: First load budget
         run: npm run size
+
+      - name: Add any extra production environment for the boot check
+        if: ${{ inputs.boot_env != '' }}
+        run: printf '%s
+' "${{ inputs.boot_env }}" >> "$GITHUB_ENV"
 
       - name: Boot what production would install, and call it
         env:
