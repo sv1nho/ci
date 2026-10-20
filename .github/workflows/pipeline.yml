@@ -101,8 +101,6 @@ jobs:
           BETTER_AUTH_SECRET: ci-only-secret-not-used-for-any-session
           GOOGLE_CLIENT_ID: ci-only-not-a-real-client
           GOOGLE_CLIENT_SECRET: ci-only-not-a-real-secret
-          RESEND_API_KEY: ci-only-not-a-real-key
-          OTP_FROM: 'CI <ci-only@app.example>'
         run: |
           npm ci --omit=dev --omit=optional --ignore-scripts
 
