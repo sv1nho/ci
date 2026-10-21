@@ -59,6 +59,15 @@ jobs:
       - name: Throw generated text at every form
         run: npm run e2e
 
+      - name: Keep what failed, so a nightly red is worth reading
+        if: failure()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: browser-results
+          path: e2e/.results
+          include-hidden-files: true
+          retention-days: 7
+
   fuzzing:
     name: Hostile input against the api
     runs-on: ubuntu-latest
